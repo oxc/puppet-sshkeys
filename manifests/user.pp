@@ -52,12 +52,10 @@ define sshkeys::user (
 
   #do it only if the user is present
   if ( $ensure == 'present' ) {
-    if ( is_array($keys) ) {
-      $fin_keys = sshkeys_convert_to_hash($keys,$user,$::fqdn)
-    } elsif ( is_hash($keys) ) {
-      $fin_keys = sshkeys_restruct_to_hash($keys,$user,$::fqdn)
-    } else {
-      fail ( 'keys should be defined as array or hash')
+    $fin_keys = $keys ? {
+      Array => sshkeys_convert_to_hash($keys,$user,$::fqdn),
+      Hash  => sshkeys_restruct_to_hash($keys,$user,$::fqdn),
+      default => fail ( 'keys should be defined as array or hash')
     }
 
     if ( $fix_permissions == true and $fin_keys != {} ) {
