@@ -53,8 +53,8 @@ define sshkeys::user (
   #do it only if the user is present
   if ( $ensure == 'present' ) {
     $fin_keys = $keys ? {
-      Array => sshkeys_convert_to_hash($keys,$user,$::fqdn),
-      Hash  => sshkeys_restruct_to_hash($keys,$user,$::fqdn),
+      Array => sshkeys_convert_to_hash($keys,$user,$facts['networking']['fqdn']),
+      Hash  => sshkeys_restruct_to_hash($keys,$user,$facts['networking']['fqdn']),
       default => fail ( 'keys should be defined as array or hash')
     }
 
